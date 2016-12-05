@@ -1,0 +1,145 @@
+---
+swagger: '2.0'
+info:
+  description: A sample API that uses a petstore as an example to demonstrate features
+    in the swagger-2.0 specification
+  x-logo:
+    url: 'https://rebilly.github.io/ReDoc/petstore-logo.png'
+  version: 1.0.0
+  title: ivestor demo API
+  termsOfService: http://helloreverb.com/terms/
+  contact:
+    email: foo@example.com
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: localhost:8080
+basePath: "/api/V1"
+schemes:
+- http
+paths:
+  "/pets":
+    get:
+      summary: ''
+      description: Returns all pets from the system that the user has access to
+      operationId: findPets
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      - application/xml
+      - text/xml
+      - text/html
+      parameters:
+      - name: tags
+        in: query
+        description: tags to filter by
+        required: false
+        type: array
+        items:
+          type: string
+        collectionFormat: multi
+      - name: limit
+        in: query
+        description: maximum number of results to return
+        required: false
+        type: integer
+        format: int32
+      responses:
+        '200':
+          description: unexpected error
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Pet"
+    post:
+      summary: ''
+      description: Creates a new pet in the store.  Duplicates are allowed
+      operationId: addPet
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Pet to add to the store
+        required: true
+        schema:
+          "$ref": "#/definitions/NewPet"
+      responses:
+        '200':
+          description: unexpected error
+          schema:
+            "$ref": "#/definitions/Pet"
+  "/pets/{id}":
+    get:
+      summary: ''
+      description: Returns a user based on a single ID, if the user does not have
+        access to the pet
+      operationId: findPetById
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      - application/xml
+      - text/xml
+      - text/html
+      parameters:
+      - name: id
+        in: path
+        description: ID of pet to fetch
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: unexpected error
+          schema:
+            "$ref": "#/definitions/Pet"
+    delete:
+      summary: ''
+      description: deletes a single pet based on the ID supplied
+      operationId: deletePet
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: ID of pet to delete
+        required: true
+        type: integer
+        format: int64
+      responses:
+        '200':
+          description: unexpected error
+        '204':
+          description: pet deleted
+definitions:
+  Pet:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      tag:
+        type: string
+  NewPet:
+    type: object
+    required:
+    - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      tag:
+        type: string
